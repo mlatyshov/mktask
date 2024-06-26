@@ -12,4 +12,25 @@ class PopulationController extends AbstractController
         return $this->json($years);
     }
 
+    /*
+    Создадим массив с данными о людях
+    */
+    private function generatePeople(int $count): array
+    {
+        $people = [];
+        $yearNow = date('Y');
+        $minLife = 30;    // будем оптимистами
+        for ($i = 0; $i < $count; $i++) {
+            $birthYear = rand(1966, 2020);
+            $deathYear = ($yearNow - $birthYear > $minLife)? rand($birthYear, $yearNow) : 0;
+            $people[] = [
+                'id' => $i + 1,
+                'birthYear' => $birthYear,
+                'deathYear' => $deathYear, 
+            ];
+        }
+        return $people;
+    }
+
+
 }
