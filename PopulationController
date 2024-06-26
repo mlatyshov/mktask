@@ -22,7 +22,7 @@ class PopulationController extends AbstractController
         $minLife = 30;    // будем оптимистами
         for ($i = 0; $i < $count; $i++) {
             $birthYear = rand(1966, 2020);
-            $deathYear = ($yearNow - $birthYear > $minLife)? rand($birthYear, $yearNow) : 0;
+            $deathYear = ($yearNow - $birthYear > $minLife)? rand($birthYear, $yearNow) : null;
             $people[] = [
                 'id' => $i + 1,
                 'birthYear' => $birthYear,
@@ -32,5 +32,35 @@ class PopulationController extends AbstractController
         return $people;
     }
 
+    /*
+    Считаем количество людей живущих по годам и выбираем годы с максмимальной плотностью  
+    */ 
+    private function calculateYears(array $people): array
+    {
+        $yearCounts = [];
+
+        foreach ($people as $person) {
+            $maxYear = $person['deathYear'] ?? date('Y');  
+                
+            for ($year = $person['birthYear']; $year <= $maxYear; $year++) {
+                if (!isset($yearCounts[$year])) {
+                    $yearCounts[$year] = 0;
+                }
+                $yearCounts[$year]++;
+            }
+        }
+
+        $maxCount = max($yearCounts);
+        $maxYears = array_keys($yearCounts, $maxCount);
+        
+        // Указываем, сколько годов нужно получить
+        $n = 10;
+        
+        // Сортируем массив по убыванию
+        rsort($array);
+
+        $topYears = array_slice($array, 0, min($n, count($topYears)) );
+        return $topYears;
+    }
 
 }
