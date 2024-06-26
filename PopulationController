@@ -3,5 +3,13 @@ class PopulationController extends AbstractController
     /**
      * @Route("/population", name="population")
      */
-   
+
+    public function index(): Response
+    {
+        $people = $this->generatePeople(1000);
+        $years = $this->calculateYears($people);
+
+        return $this->json($years);
+    }
+
 }
